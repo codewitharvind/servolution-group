@@ -3,26 +3,29 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/Response/Counts.dart';
-import 'package:servolution/screens/OtherPage.dart';
-import 'package:servolution/screens/ProfilePage.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:servolution/screens/tabTotal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pie_chart/pie_chart.dart';
 
+// ignore: camel_case_types
 class dashboard extends StatefulWidget {
+  const dashboard({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
+    // ignore: todo
     // TODO: implement createState
     return _dashboard();
   }
 }
 
+// ignore: camel_case_types
 class _dashboard extends State<dashboard> {
   String _date1 = "Select Date";
   String _date2 = "Select Date";
@@ -40,8 +43,20 @@ class _dashboard extends State<dashboard> {
       active = 0,
       tempClosed = 0;
 
+  Map<String, double> dataMap = {
+    "Total Call": 1.00,
+    "Open": 2.00,
+    "Closed": 1.00
+  };
+  @override
+  void initState() {
+    super.initState();
+    getTicketsstatus();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
 
     /* getTicketsstatus();  */
@@ -73,189 +88,215 @@ class _dashboard extends State<dashboard> {
               ],
             ), */
           ),
-          body: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
-                        child: RichText(
-                          text: const TextSpan(
-                            text: 'From Date',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
-                        child: Text(
-                          _date1,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 14.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
-                        child: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () {
-                            DatePicker.showDatePicker(context,
-                                theme: const DatePickerTheme(
-                                  containerHeight: 210.0,
-                                ),
-                                showTitleActions: true,
-                                maxTime: DateTime(2025, 12, 31),
-                                onConfirm: (date) {
-                              print('confirm $date');
-
-                              var selectedFirstDate =
-                                  DateFormat('dd-MM-yyyy').format(date);
-                              setState(() {
-                                _date1 = selectedFirstDate;
-                              });
-                            },
-                                currentTime: DateTime.now(),
-                                locale: LocaleType.en);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
-                        child: RichText(
-                          text: const TextSpan(
-                            text: 'End Date',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
-                        child: Text(
-                          _date2,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 14.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
-                        child: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () {
-                            DatePicker.showDatePicker(context,
-                                theme: const DatePickerTheme(
-                                  containerHeight: 210.0,
-                                ),
-                                showTitleActions: true,
-                                minTime: DateTime.now(),
-                                maxTime: DateTime(2025, 12, 31),
-                                onConfirm: (date) {
-                              print('confirm $date');
-
-                              var selectedEndDate =
-                                  DateFormat('dd-MM-yyyy').format(date);
-                              setState(() {
-                                _date2 = selectedEndDate;
-                              });
-                            },
-                                currentTime: DateTime.now(),
-                                locale: LocaleType.en);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
-                  child: InkWell(
-                    onTap: () async {
-                      if (_date1 == 'Select Date') {
-                        print("date1 empty");
-                        final snackBar = SnackBar(
-                          content: Text('From Date not selected',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 12.0, color: Colors.black)),
-                          backgroundColor: (const Color(0xfffcb913)),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        Response response;
-                        final Dio dio = Dio();
-                        dio.options.headers['content-Type'] =
-                            'application/json';
-                        dio.options.headers["authorization"] =
-                            "${sharedPreferences.getString('api_access_token')}";
-                        response = await dio.post(
-                            'http://49.248.144.235/lv/servolutions/api/tickets_data_of_user_by_daterange',
-                            queryParameters: {
-                              'user_id': sharedPreferences.getInt('user_id'),
-                              'start_date': _date1,
-                              'end_date': _date2
-                            });
-                        print(response.data.toString());
-                      }
-                    },
-                    child: Container(
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: const Color(0xfffcb913),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'CONFIRM AND SUBMIT',
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'From Date',
                           style: TextStyle(
                               fontFamily: 'Poppins',
-                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
                               color: Colors.black),
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
+                      child: Text(
+                        _date1,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              theme: const DatePickerTheme(
+                                containerHeight: 210.0,
+                              ),
+                              showTitleActions: true,
+                              maxTime: DateTime(2025, 12, 31),
+                              onConfirm: (date) {
+                            print('confirm $date');
+
+                            var selectedFirstDate =
+                                DateFormat('dd-MM-yyyy').format(date);
+                            setState(() {
+                              _date1 = selectedFirstDate;
+                            });
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'End Date',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
+                      child: Text(
+                        _date2,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              theme: const DatePickerTheme(
+                                containerHeight: 210.0,
+                              ),
+                              showTitleActions: true,
+                              minTime: DateTime.now(),
+                              maxTime: DateTime(2025, 12, 31),
+                              onConfirm: (date) {
+                            print('confirm $date');
+
+                            var selectedEndDate =
+                                DateFormat('dd-MM-yyyy').format(date);
+                            setState(() {
+                              _date2 = selectedEndDate;
+                            });
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
+                child: InkWell(
+                  onTap: () async {
+                    if (_date1 == 'Select Date') {
+                      print("date1 empty");
+                      final snackBar = SnackBar(
+                        content: Text('From Date not selected',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12.0, color: Colors.black)),
+                        backgroundColor: (const Color(0xfffcb913)),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      Response response;
+                      final Dio dio = Dio();
+                      dio.options.headers['content-Type'] = 'application/json';
+                      dio.options.headers["authorization"] =
+                          "${sharedPreferences.getString('api_access_token')}";
+                      response = await dio.post(
+                          'http://49.248.144.235/lv/servolutions/api/tickets_data_of_user_by_daterange',
+                          queryParameters: {
+                            'user_id': sharedPreferences.getInt('user_id'),
+                            'start_date': _date1,
+                            'end_date': _date2
+                          });
+                      if (response.data['status'] == true) {
+                        /* setState(() {
+                          dataMap = response.data['data'];
+                        }); */
+                        final Map<String, dynamic> data =
+                            Map<String, dynamic>.from(response.data);
+                  /*       print(data['data'] as Map<String, double>); */
+                        setState(() {
+                          dataMap = data['data'];
+                        });
+                        print(dataMap);
+                      }
+                    }
+                  },
+                  child: Container(
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: const Color(0xfffcb913),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'CONFIRM AND SUBMIT',
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 15.0,
+                            color: Colors.black),
+                      ),
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-                  child: tabTotal(),
+              ),
+              SizedBox(
+                  child: PieChart(
+                dataMap: dataMap,
+                animationDuration: const Duration(milliseconds: 800),
+                chartLegendSpacing: 25,
+                chartRadius: MediaQuery.of(context).size.width / 1.8,
+                initialAngleInDegree: 0,
+                chartType: ChartType.disc,
+                ringStrokeWidth: 32,
+                centerText: "",
+                legendOptions: const LegendOptions(
+                  showLegendsInRow: false,
+                  legendPosition: LegendPosition.right,
+                  showLegends: true,
+                  legendTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ],
-            ),
+                chartValuesOptions: const ChartValuesOptions(
+                  showChartValueBackground: true,
+                  showChartValues: true,
+                  showChartValuesInPercentage: true,
+                  showChartValuesOutside: false,
+                  decimalPlaces: 1,
+                ),
+              )),
+            ],
           ),
           /*  Padding(
                                   padding:
@@ -277,17 +318,17 @@ class _dashboard extends State<dashboard> {
                   ),
                   trailing: const Icon(Icons.logout),
                   onTap: () async {
-                    String api_access_token;
+                    String apiAccessToken;
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
-                    api_access_token =
+                    apiAccessToken =
                         sharedPreferences.getString('api_access_token')!;
 
                     Response response;
                     final Dio dio = Dio();
                     dio.options.headers['content-Type'] = 'application/json';
                     dio.options.headers["authorization"] =
-                        "token $api_access_token";
+                        "token $apiAccessToken";
                     response = await dio.post(
                         'http://49.248.144.235/lv/servolutions/api/logout',
                         queryParameters: {});
@@ -348,7 +389,7 @@ class _dashboard extends State<dashboard> {
     response = await dio.post(
         'http://49.248.144.235/lv/servolutions/api/get_tickets_dashboard_data_of_user',
         queryParameters: {'user_id': sharedPreferences.getInt('user_id')});
-
+    print(response.data['data']);
     var counts = countsFromJson(response.toString());
 
     for (int i = 0; i < counts.data.length; i++) {

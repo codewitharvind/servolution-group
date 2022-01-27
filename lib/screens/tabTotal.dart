@@ -5,14 +5,19 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:servolution/Response/Counts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class tabTotal extends StatefulWidget {
+  const tabTotal({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
+    // ignore: todo
     // TODO: implement createState
     return _tabTotal();
   }
 }
 
+// ignore: camel_case_types
 class _tabTotal extends State<tabTotal> {
   // late int total, todays, open, reOpen, closed, resolved, active, tempClosed;
 

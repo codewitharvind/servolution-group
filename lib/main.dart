@@ -8,13 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:servolution/screens/dashboard.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   SplashScreenState createState() => SplashScreenState();
 }
@@ -54,7 +58,7 @@ class SplashScreenState extends State<MyHomePage> {
     print(userName);
     if (userName != "" && userName != null) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => dashboard()));
+          context, MaterialPageRoute(builder: (context) => const dashboard()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const login()));

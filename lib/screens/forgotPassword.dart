@@ -29,6 +29,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return Scaffold(
         key: _scaffoldKey,
@@ -144,7 +145,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ResetPassword()));
+                                      builder: (context) => const ResetPassword()));
                             } else {
                               // _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('Assign a GlobalKey to the Scaffold')));
                               print(response.data['message']);
