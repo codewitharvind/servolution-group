@@ -1,10 +1,8 @@
 // ignore_for_file: deprecated_member_use, unnecessary_const
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/dashboard.dart';
 import 'package:servolution/screens/forgotPassword.dart';
@@ -12,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool _isLoading = true;
 
+// ignore: camel_case_types
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
 
@@ -19,6 +18,7 @@ class login extends StatefulWidget {
   _loginState createState() => _loginState();
 }
 
+// ignore: camel_case_types
 class _loginState extends State<login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -33,6 +33,7 @@ class _loginState extends State<login> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return WillPopScope(
         onWillPop: () async {
@@ -200,37 +201,37 @@ class _loginState extends State<login> {
                                   if (response.data['status'] == true) {
                                     print('Success');
 
-                                    int user_id, status;
+                                    int userId, status;
 
                                     String name,
                                         email,
-                                        contact_number,
-                                        alt_contact_number,
-                                        date_of_joining,
-                                        api_access_token;
+                                        contactNumber,
+                                        altContactNumber,
+                                        dateOfJoining,
+                                        apiAccessToken;
 
                                     // integer data response
-                                    user_id = response.data['data']['id'];
+                                    userId = response.data['data']['id'];
                                     status = response.data['data']['status'];
 
                                     // string data response
                                     name = response.data['data']['name'];
                                     email = response.data['data']['email'];
-                                    contact_number =
+                                    contactNumber =
                                         response.data['data']['contact_number'];
-                                    alt_contact_number = response.data['data']
+                                    altContactNumber = response.data['data']
                                         ['alt_contact_number'];
-                                    date_of_joining = response.data['data']
+                                    dateOfJoining = response.data['data']
                                         ['date_of_joining'];
 
-                                    api_access_token =
+                                    apiAccessToken =
                                         response.data['api_access_token'];
-                                    print(api_access_token);
+                                    print(apiAccessToken);
 
                                     SharedPreferences sharedPreferences =
                                         await SharedPreferences.getInstance();
                                     await sharedPreferences.setInt(
-                                        'user_id', user_id);
+                                        'user_id', userId);
                                     await sharedPreferences.setInt(
                                         'status', status);
                                     await sharedPreferences.setString(
@@ -238,14 +239,14 @@ class _loginState extends State<login> {
                                     await sharedPreferences.setString(
                                         'email', email);
                                     await sharedPreferences.setString(
-                                        'contact_number', contact_number);
+                                        'contact_number', contactNumber);
                                     await sharedPreferences.setString(
                                         'alt_contact_number',
-                                        alt_contact_number);
+                                        altContactNumber);
                                     await sharedPreferences.setString(
-                                        'date_of_joining', date_of_joining);
+                                        'date_of_joining', dateOfJoining);
                                     await sharedPreferences.setString(
-                                        'api_access_token', api_access_token);
+                                        'api_access_token', apiAccessToken);
 
                                     print('printing-from-sharedpreferences');
                                     print(sharedPreferences.get('user_id'));
@@ -254,7 +255,7 @@ class _loginState extends State<login> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => dashboard()));
+                                            builder: (context) => const dashboard()));
                                     final snackBar = SnackBar(
                                       content: Text(
                                           'Welcome to Servolutions',
