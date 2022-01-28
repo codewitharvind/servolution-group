@@ -1,13 +1,13 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/Response/Counts.dart';
+import 'package:servolution/screens/ProfilePage.dart';
 import 'package:servolution/screens/login.dart';
-import 'package:servolution/screens/tabTotal.dart';
+import 'package:servolution/screens/ticketListPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -43,15 +43,16 @@ class _dashboard extends State<dashboard> {
       active = 0,
       tempClosed = 0;
 
-  Map<String, double> dataMap = {
-    "Total Call": 1.00,
-    "Open": 2.00,
-    "Closed": 1.00
-  };
+  Map<String, double> dataMap = {"Total Call": 3, "Open": 1, "Closed": 1};
   @override
   void initState() {
     super.initState();
     getTicketsstatus();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -65,13 +66,12 @@ class _dashboard extends State<dashboard> {
         length: 1,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            iconTheme: const IconThemeData(color: Color(0xfffcb913)),
+            backgroundColor: const Color(0xfffcb913),
+            iconTheme: const IconThemeData(color: Colors.black),
             title: Center(
                 child: Text(
               "M - AUDIT",
-              style: GoogleFonts.poppins(
-                  fontSize: 20.0, color: const Color(0xfffcb913)),
+              style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
             )),
             actions: <Widget>[
               IconButton(
@@ -239,16 +239,9 @@ class _dashboard extends State<dashboard> {
                             'end_date': _date2
                           });
                       if (response.data['status'] == true) {
-                        /* setState(() {
-                          dataMap = response.data['data'];
-                        }); */
-                        final Map<String, dynamic> data =
-                            Map<String, dynamic>.from(response.data);
-                  /*       print(data['data'] as Map<String, double>); */
-                        setState(() {
-                          dataMap = data['data'];
-                        });
-                        print(dataMap);
+                        Map<String, dynamic> data = Map<String, dynamic>.from(
+                            response.data as Map<Object?, Object?>);
+                        print(data.runtimeType);
                       }
                     }
                   },
@@ -274,15 +267,15 @@ class _dashboard extends State<dashboard> {
                   child: PieChart(
                 dataMap: dataMap,
                 animationDuration: const Duration(milliseconds: 800),
-                chartLegendSpacing: 25,
-                chartRadius: MediaQuery.of(context).size.width / 1.8,
+                chartLegendSpacing: 16,
+                chartRadius: MediaQuery.of(context).size.width / 1.5,
                 initialAngleInDegree: 0,
                 chartType: ChartType.disc,
                 ringStrokeWidth: 32,
                 centerText: "",
                 legendOptions: const LegendOptions(
-                  showLegendsInRow: false,
-                  legendPosition: LegendPosition.right,
+                  showLegendsInRow: true,
+                  legendPosition: LegendPosition.bottom,
                   showLegends: true,
                   legendTextStyle: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -310,6 +303,32 @@ class _dashboard extends State<dashboard> {
           drawer: Drawer(
               child: ListView(
             children: <Widget>[
+              ListTile(
+                title: Text("Profile",
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black)),
+                trailing: const Icon(Icons.person),
+                onTap: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage())),
+              ),
+              const Divider(
+                thickness: 1.0,
+              ),
+              ListTile(
+                title: Text("Tickets",
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black)),
+                trailing: const Icon(Icons.insert_drive_file_rounded),
+                onTap: () =>  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TicketList())),
+              ),
+              const Divider(
+                thickness: 1.0,
+              ),
               ListTile(
                   title: Text(
                     "Logout",
@@ -389,7 +408,7 @@ class _dashboard extends State<dashboard> {
     response = await dio.post(
         'http://49.248.144.235/lv/servolutions/api/get_tickets_dashboard_data_of_user',
         queryParameters: {'user_id': sharedPreferences.getInt('user_id')});
-    print(response.data['data']);
+    print(response.data['data'].runtimeType);
     var counts = countsFromJson(response.toString());
 
     for (int i = 0; i < counts.data.length; i++) {

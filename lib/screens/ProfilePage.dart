@@ -1,6 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:servolution/screens/dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +15,12 @@ class ProfilePage extends StatefulWidget {
 
 class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController pincodeController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
@@ -19,83 +29,39 @@ class MapScreenState extends State<ProfilePage>
     // ignore: todo
     // TODO: implement initState
     super.initState();
+    fetchInfo();
+  }
+
+  fetchInfo() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    usernameController.text = sharedPreferences.getString('name')!;
+    emailController.text = sharedPreferences.getString('email')!;
+    mobileController.text = sharedPreferences.getString('contact_number')!;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const dashboard())),
+          ),
+          backgroundColor: const Color(0xfffcb913),
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: Center(
+              child: Text(
+            "PROFILE",
+            style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
+          )),
+        ),
         body: Container(
           color: Colors.white,
           child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Container(
-                    height: 250.0,
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.only(left: 20.0, top: 20.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const <Widget>[
-                                Icon(
-                                  Icons.arrow_back_ios,
-                                  color: Colors.black,
-                                  size: 22.0,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 25.0),
-                                  child: Text('PROFILE',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0,
-                                          fontFamily: 'sans-serif-light',
-                                          color: Colors.black)),
-                                )
-                              ],
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Stack(fit: StackFit.loose, children: <Widget>[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                    width: 140.0,
-                                    height: 140.0,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: ExactAssetImage(
-                                            'assets/pic1.jpg'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                              ],
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 90.0, right: 100.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      radius: 25.0,
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ]),
-                        )
-                      ],
-                    ),
-                  ),
                   Container(
                     color: const Color(0xffFFFFFF),
                     child: Padding(
@@ -108,7 +74,8 @@ class MapScreenState extends State<ProfilePage>
                               padding: const EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   Column(
@@ -160,12 +127,12 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   Flexible(
                                     child: TextField(
+                                      controller: usernameController,
                                       decoration: const InputDecoration(
                                         hintText: "Enter Your Name",
                                       ),
                                       enabled: !_status,
                                       autofocus: !_status,
-
                                     ),
                                   ),
                                 ],
@@ -198,6 +165,8 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   Flexible(
                                     child: TextField(
+                                      controller: emailController,
+                                      readOnly: true,
                                       decoration: const InputDecoration(
                                           hintText: "Enter Email ID"),
                                       enabled: !_status,
@@ -233,65 +202,11 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   Flexible(
                                     child: TextField(
+                                      controller: mobileController,
                                       decoration: const InputDecoration(
                                           hintText: "Enter Mobile Number"),
                                       enabled: !_status,
                                     ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: const <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      'Pin Code',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      'State',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: TextField(
-                                        decoration: const InputDecoration(
-                                            hintText: "Enter Pin Code"),
-                                        enabled: !_status,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                  Flexible(
-                                    child: TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter State"),
-                                      enabled: !_status,
-                                    ),
-                                    flex: 2,
                                   ),
                                 ],
                               )),
@@ -328,11 +243,47 @@ class MapScreenState extends State<ProfilePage>
                 child: const Text("Save"),
                 textColor: Colors.white,
                 color: Colors.green,
-                onPressed: () {
-                  setState(() {
-                    _status = true;
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  });
+                onPressed: () async {
+                  SharedPreferences sharedPreferences =
+                      await SharedPreferences.getInstance();
+                  Response response;
+                  final Dio dio = Dio();
+                  dio.options.headers['content-Type'] = 'application/json';
+                  dio.options.headers["authorization"] =
+                      "${sharedPreferences.getString('api_access_token')}";
+                  response = await dio.post(
+                      'http://49.248.144.235/lv/servolutions/api/get_update_user_profile',
+                      queryParameters: {
+                        'user_id': sharedPreferences.getInt('user_id'),
+                        'name': usernameController.text,
+                        'contact_number': mobileController.text
+                      });
+                  if (response.data['status'] == true) {
+                    print(response.data);
+                    setState(() {
+                      _status = true;
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    });
+                    await sharedPreferences.setString(
+                        'name', usernameController.text);
+                    await sharedPreferences.setString(
+                        'contact_number', mobileController.text);
+                    final snackBar = SnackBar(
+                      content: Text(response.data['message'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 12.0, color: Colors.white)),
+                      backgroundColor: (const Color(0xfffcb913)),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    final snackBar = SnackBar(
+                      content: Text(response.data['message'],
+                          style: GoogleFonts.poppins(
+                              fontSize: 12.0, color: Colors.white)),
+                      backgroundColor: (const Color(0xfffcb913)),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
