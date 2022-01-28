@@ -16,9 +16,7 @@ class tabTotal extends StatefulWidget {
 class _tabTotal extends State<tabTotal> {
   // late int total, todays, open, reOpen, closed, resolved, active, tempClosed;
 
-  Map<String, double> dataMap = {"Total Call": 1,
-    "Open": 1,
-    "Closed": 1};
+  Map<String, double> dataMap = {"Total Call": 1, "Open": 1, "Closed": 1};
 
   var arr = [];
   int total = 0,
@@ -28,7 +26,8 @@ class _tabTotal extends State<tabTotal> {
       closed = 0,
       resolved = 0,
       active = 0,
-      tempClosed = 0;
+      tempClosed = 0,
+      reassign = 0;
   @override
   Widget build(BuildContext context) {
     // ignore: todo
@@ -81,15 +80,57 @@ class _tabTotal extends State<tabTotal> {
     response = await dio.post(
         'http://49.248.144.235/lv/servolutions/api/get_tickets_dashboard_data_of_user',
         queryParameters: {'user_id': sharedPreferences.getInt('user_id')});
-   var counts = countsFromJson(response.toString());
+    var counts = countsFromJson(response.toString());
+    print(response);
 
-    for(int i = 0; i < counts.data.length; i++) {
-      if(counts.data[i].name == 'Total') {
+    for (int i = 0; i < counts.data.length; i++) {
+      if (counts.data[i].name == 'Total') {
         setState(() {
           total = counts.data[i].count;
         });
       }
+      if (counts.data[i].name == 'Todays') {
+        setState(() {
+          todays = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Open') {
+        setState(() {
+          open = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Reopen') {
+        setState(() {
+          reOpen = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Closed') {
+        setState(() {
+          closed = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Resolved') {
+        setState(() {
+          resolved = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Active') {
+        setState(() {
+          active = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Temporary Close') {
+        setState(() {
+          tempClosed = counts.data[i].count;
+        });
+      }
+      if (counts.data[i].name == 'Reassign') {
+        setState(() {
+          reassign = counts.data[i].count;
+        });
+      }
     }
+    print(total);
 
     /*if (response.data['status'] == true) {
       // integer data response

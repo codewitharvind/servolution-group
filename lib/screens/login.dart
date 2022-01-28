@@ -257,7 +257,7 @@ class _loginState extends State<login> {
                                             builder: (context) => dashboard()));
                                     final snackBar = SnackBar(
                                       content: Text(
-                                          'Welcome to Servolutions Group',
+                                          'Welcome to Servolutions',
                                           style: GoogleFonts.poppins(
                                               fontSize: 12.0,
                                               color: Colors.white)),
