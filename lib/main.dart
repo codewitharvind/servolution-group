@@ -1,11 +1,9 @@
-
-
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:servolution/screens/dashboard.dart';
+import 'package:servolution/styles.dart';
 
 void main() {
   runApp(const MyApp());
@@ -81,10 +79,7 @@ class SplashScreenState extends State<MyHomePage> {
                     Navigator.pop(context,
                         MaterialPageRoute(builder: (context) => const login()));
                   },
-                  child: const SpinKitThreeBounce(
-                    color: Color(0xfffcb913),
-                    size: 30.0,
-                  ))),
+                  child: Styles.spinLoader)),
         ],
       )),
     );

@@ -54,6 +54,7 @@ class _TicketListState extends State<TicketList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
             onPressed: () => Navigator.pushReplacement(context,
@@ -72,13 +73,20 @@ class _TicketListState extends State<TicketList> {
             itemCount: count,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 0.0),
                 child: Card(
                   elevation: 9,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TicketDetail(
+                                  text: dataList[index]['ticket_number'])));
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -97,17 +105,13 @@ class _TicketListState extends State<TicketList> {
                                             .toString(),
                                     textAlign: TextAlign.left,
                                     style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0,
-                                      color: Color(0xfffcb913),
-                                    )),
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 18.0,
+                                        color: Colors.black)),
                               ),
                             ],
                           ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
                         ),
                         Padding(
                           padding:
@@ -115,207 +119,81 @@ class _TicketListState extends State<TicketList> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Expanded(
-                                child: Center(
-                                  child: Text("Docket Number : ",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              const VerticalDivider(width: 1.0),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    dataList[index]['ticket_number'] ?? '',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              const Expanded(
-                                child: Center(
-                                  child: Text("ATM No. : ",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              const VerticalDivider(width: 1.0),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    dataList[index]['atm_no'] ?? '',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              const Expanded(
-                                child: Center(
-                                  child: Text("Site ID : ",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              const VerticalDivider(width: 1.0),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    dataList[index]['site_id'] ?? '',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              const Expanded(
-                                child: Center(
-                                  child: Text("ATM Serial No. : ",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              const VerticalDivider(width: 1.0),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    dataList[index]['atm_sr_no'] ?? '',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              const Expanded(
-                                child: Center(
-                                  child: Text("Location : ",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                          color: Colors.black)),
-                                ),
-                              ),
-                              const VerticalDivider(width: 1.0),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    dataList[index]['location'] ?? '',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 10.0),
-                          child: InkWell(
-                            onTap: () async {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TicketDetail(
-                                          text: dataList[index]['ticket_number'])));
-                            },
-                            child: Container(
-                              height: 35.0,
-                              decoration: BoxDecoration(
-                                color: const Color(0xfffcb913),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: const Center(
+                              const Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 0.0),
                                 child: Text(
-                                  'VIEW DETAILS',
+                                  'ATM No. / Site ID',
                                   style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 15.0,
-                                      color: Colors.black),
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.0,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    140.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  height: 35.0,
+                                  width: 80.0,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xfffcb913),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      dataList[index]['status_name'] ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 5.0, 0.0, 10.0),
+                                child: Text(
+                                  dataList[index]['atm_no'] +
+                                      ' / ' +
+                                      dataList[index]['site_id'],
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    100.0, 5.0, 0.0, 10.0),
+                                child: Text(
+                                  dataList[index]['created_at'],
+                                  textAlign: TextAlign.right,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.normal,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 12.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

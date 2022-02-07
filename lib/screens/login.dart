@@ -2,11 +2,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/dashboard.dart';
 import 'package:servolution/screens/forgotPassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:servolution/styles.dart';
 
 bool _isLoading = true;
 
@@ -83,11 +83,7 @@ class _loginState extends State<login> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 00, 5, 5),
-                      child: Text(
-                        "M - AUDIT",
-                        style: GoogleFonts.poppins(
-                            fontSize: 30.0, color: const Color(0xff3c4250)),
-                      ),
+                      child: Styles.headingText,
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -241,8 +237,7 @@ class _loginState extends State<login> {
                                     await sharedPreferences.setString(
                                         'contact_number', contactNumber);
                                     await sharedPreferences.setString(
-                                        'alt_contact_number',
-                                        altContactNumber);
+                                        'alt_contact_number', altContactNumber);
                                     await sharedPreferences.setString(
                                         'date_of_joining', dateOfJoining);
                                     await sharedPreferences.setString(
@@ -255,10 +250,10 @@ class _loginState extends State<login> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const dashboard()));
+                                            builder: (context) =>
+                                                const dashboard()));
                                     final snackBar = SnackBar(
-                                      content: Text(
-                                          'Welcome to Servolutions',
+                                      content: Text('Welcome to Servolutions',
                                           style: GoogleFonts.poppins(
                                               fontSize: 12.0,
                                               color: Colors.white)),
@@ -305,19 +300,13 @@ class _loginState extends State<login> {
                             child: Text(
                               "Log in",
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                  fontSize: 15.0, color: Colors.black),
+                              style: Styles.googleFontBlack,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    _isLoading
-                        ? const SpinKitThreeBounce(
-                            color: Color(0xfffcb913),
-                            size: 30.0,
-                          )
-                        : const SizedBox(),
+                    _isLoading ? Styles.spinLoader : const SizedBox(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 50, 5, 5),
                       child: InkWell(
@@ -330,8 +319,7 @@ class _loginState extends State<login> {
                         },
                         child: Text(
                           "Forgot Password?",
-                          style: GoogleFonts.poppins(
-                              fontSize: 15.0, color: const Color(0xff939298)),
+                          style: Styles.googleFontGrey,
                         ),
                       ),
                     ),

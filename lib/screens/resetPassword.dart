@@ -3,10 +3,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:servolution/styles.dart';
 
 bool _isLoading = true;
 
@@ -51,11 +51,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 00, 5, 5),
-                child: Text(
-                  "M - AUDIT",
-                  style: GoogleFonts.poppins(
-                      fontSize: 30.0, color: const Color(0xff3c4250)),
-                ),
+                child: Styles.headingText,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -251,18 +247,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: Text(
                         "Submit",
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                            fontSize: 15.0, color: Colors.black),
+                        style: Styles.googleFontBlack,
                       ),
                     ),
                   ),
                 ),
               ),
               _isLoading
-                  ? const SpinKitThreeBounce(
-                      color: Color(0xfffcb913),
-                      size: 30.0,
-                    )
+                  ? Styles.spinLoader
                   : const SizedBox(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 50, 5, 5),
@@ -273,8 +265,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   child: Text(
                     "Login",
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: const Color(0xff939298)),
+                    style: Styles.googleFontGrey,
                   ),
                 ),
               ),

@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -263,8 +262,7 @@ class _dashboard extends State<dashboard> {
                   ),
                 ),
               ),
-              SizedBox(
-                  child: PieChart(
+              PieChart(
                 dataMap: dataMap,
                 animationDuration: const Duration(milliseconds: 800),
                 chartLegendSpacing: 16,
@@ -288,19 +286,70 @@ class _dashboard extends State<dashboard> {
                   showChartValuesOutside: false,
                   decimalPlaces: 1,
                 ),
-              )),
+              ),
             ],
           ),
-          /*  Padding(
-                                  padding:
-                                      EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 00.0),
-                                  child: Text(_date1,
-                                      textAlign: TextAlign.left,
-                                      style: Styles.appScreenSmallText),
-                                ),
-            child: tabTotal(), */
-
           drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Image.asset(
+                    'assets/servolutions_logo.jpg',
+                    width: 100.0,
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.person_outline, size: 35.0),
+                  title: Text(
+                    'Profile',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                  },
+                ),
+                const Divider(
+                  thickness: 1.0,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.insert_drive_file_outlined, size: 35.0),
+                  title: Text(
+                    'Tickets',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TicketList()));
+                  },
+                ),
+                const Divider(
+                  thickness: 1.0,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.power_settings_new, size: 35.0),
+                  title: Text(
+                    'Logout',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                    logout();
+                    Navigator.pop(
+                        context); // Logout() called to clear the data stored in the shared perferences of People Manager.
+                  },
+                ),
+              ],
+            ),
+          ),
+          /*  drawer: Drawer(
               child: ListView(
             children: <Widget>[
               ListTile(
@@ -321,7 +370,7 @@ class _dashboard extends State<dashboard> {
                     style: GoogleFonts.poppins(
                         fontSize: 15.0, color: Colors.black)),
                 trailing: const Icon(Icons.insert_drive_file_rounded),
-                onTap: () =>  Navigator.pushReplacement(
+                onTap: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const TicketList())),
@@ -337,64 +386,51 @@ class _dashboard extends State<dashboard> {
                   ),
                   trailing: const Icon(Icons.logout),
                   onTap: () async {
-                    String apiAccessToken;
-                    SharedPreferences sharedPreferences =
-                        await SharedPreferences.getInstance();
-                    apiAccessToken =
-                        sharedPreferences.getString('api_access_token')!;
-
-                    Response response;
-                    final Dio dio = Dio();
-                    dio.options.headers['content-Type'] = 'application/json';
-                    dio.options.headers["authorization"] =
-                        "token $apiAccessToken";
-                    response = await dio.post(
-                        'http://49.248.144.235/lv/servolutions/api/logout',
-                        queryParameters: {});
-                    print(response.data.toString());
-
-                    if (response.data['status'] == true) {
-                      print('Success');
-                      final snackBar = SnackBar(
-                        content: Text("Logout successfully",
-                            style: GoogleFonts.poppins(
-                                fontSize: 12.0, color: Colors.white)),
-                        backgroundColor: (const Color(0xfffcb913)),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      // navigate user to dashboard screen on API success response
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const login()));
-                    } else {
-                      final snackBar = SnackBar(
-                        content: Text(response.data['message'],
-                            style: GoogleFonts.poppins(
-                                fontSize: 12.0, color: Colors.white)),
-                        backgroundColor: (const Color(0xfffcb913)),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
+                    
                   }),
-              const Divider(
-                thickness: 1.0,
-              ),
-              ListTile(
-                title: Text("Close",
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: Colors.black)),
-                trailing: const Icon(Icons.cancel),
-                onTap: () => Navigator.of(context).pop(),
-              ),
             ],
-          )),
+          )), */
         ));
   }
 
   Future getDateRange() async {
     print(_date1);
     print(_date2);
+  }
+
+  logout() async {
+    String apiAccessToken;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    apiAccessToken = sharedPreferences.getString('api_access_token')!;
+
+    Response response;
+    final Dio dio = Dio();
+    dio.options.headers['content-Type'] = 'application/json';
+    dio.options.headers["authorization"] = "token $apiAccessToken";
+    response = await dio.post(
+        'http://49.248.144.235/lv/servolutions/api/logout',
+        queryParameters: {});
+    print(response.data.toString());
+
+    if (response.data['status'] == true) {
+      print('Success');
+      final snackBar = SnackBar(
+        content: Text("Logout successfully",
+            style: GoogleFonts.poppins(fontSize: 12.0, color: Colors.white)),
+        backgroundColor: (const Color(0xfffcb913)),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // navigate user to dashboard screen on API success response
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const login()));
+    } else {
+      final snackBar = SnackBar(
+        content: Text(response.data['message'],
+            style: GoogleFonts.poppins(fontSize: 12.0, color: Colors.white)),
+        backgroundColor: (const Color(0xfffcb913)),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Future getTicketsstatus() async {
@@ -420,5 +456,3 @@ class _dashboard extends State<dashboard> {
     }
   }
 }
-
-mixin Styles {}
