@@ -94,7 +94,7 @@ class _TicketListState extends State<TicketList> {
                           padding:
                               const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
@@ -117,7 +117,7 @@ class _TicketListState extends State<TicketList> {
                           padding:
                               const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Padding(
                                 padding:
@@ -134,7 +134,7 @@ class _TicketListState extends State<TicketList> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
-                                    140.0, 0.0, 0.0, 0.0),
+                                    5.0, 0.0, 10.0, 0.0),
                                 child: Container(
                                   height: 35.0,
                                   width: 80.0,
@@ -161,7 +161,7 @@ class _TicketListState extends State<TicketList> {
                           padding:
                               const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
@@ -173,14 +173,14 @@ class _TicketListState extends State<TicketList> {
                                   style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 14.0,
+                                    fontSize: 12.0,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
-                                    100.0, 5.0, 0.0, 10.0),
+                                    80.0, 5.0, 10.0, 10.0),
                                 child: Text(
                                   dataList[index]['created_at'],
                                   textAlign: TextAlign.right,

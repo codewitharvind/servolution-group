@@ -26,4 +26,16 @@ abstract class Styles {
       thickness: 1.0,
     ),
   );
+
+  static const appSmallNormalText = TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.normal,
+      fontSize: 12.0,
+      color: Colors.black);
+
+  static const appNormalChatText = TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w600,
+      fontSize: 14.0,
+      color: Colors.black);
 }
