@@ -1,15 +1,19 @@
 // ignore_for_file: unnecessary_new, deprecated_member_use
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/ticketListPage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:servolution/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   final String text;
@@ -20,20 +24,19 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
-  late List<dynamic> commentData;
-  late String filePath;
-  final ImagePicker _picker = ImagePicker();
-  /* late XFile _imageFileList; */
-  late File uploadimage; //variable for choosed file
+  List<dynamic>? commentData;
+  String? filePath, selectedFilePath;
   int userId = 0;
   bool checkboxValue = false;
+  File? selectedfile;
+  FormData? formdata;
+
   @override
   void initState() {
     super.initState();
     commentData = [];
     getUserData();
     getTicketsDetail();
-    getDropdownStatusData();
     print(widget.text);
   }
 
@@ -42,19 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  Future getDropdownStatusData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Response response;
-    final Dio dio = Dio();
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers["authorization"] =
-        "${sharedPreferences.getString('api_access_token')}";
-    response = await dio
-        .post('http://49.248.144.235/lv/servolutions/api/get_temp_status');
-
-    if (response.data['status'] == true) {
-      print(response.data['data'].runtimeType);
-    }
+  
   }
 
   Future getUserData() async {
@@ -84,28 +75,54 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  /*  _imgFromGallery() async {
-    final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
+  getFileChoosen() async {
+    FilePickerResult? selectedfile = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc'],
     );
 
-    print("Image picker file path - ${pickedFile!.path}");
+    if (selectedfile != null) {
+      print("*****************************");
+      print(selectedfile.files.single.path);
+      setState(() {
+        selectedFilePath = selectedfile.files.single.path;
+      });
+      print("*****************************");
+    } else {
+      print("*****************************");
+      print('Picker close');
+      print("*****************************");
+    }
+  }
 
-    setState(() {
-      _imageFileList = pickedFile;
-    });
-    print(_imageFileList);
-  } */
-  Future<void> chooseImage() async {
-    final XFile? choosedimage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    //set source: ImageSource.camera to get image from camera
-    setState(() {
-      uploadimage = File(choosedimage!.path);
+  TestUpload() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final Dio dio = Dio();
+    dio.options.headers['content-Type'] = 'application/json';
+    dio.options.headers["authorization"] =
+        "${sharedPreferences.getString('api_access_token')}";
+    var formData = FormData.fromMap({
+      'ticket_id': widget.text,
+      'comment': 'hi',
+      'status': '6',
+      'documents': await MultipartFile.fromFile(selectedFilePath.toString(),
+          filename: selectedFilePath.toString().split('/').last)
     });
 
-    print(uploadimage);
+    final res = await dio.post(
+      'http://49.248.144.235/lv/servolutions/api/save_chat_details',
+      data: formData,
+      options: Options(
+        followRedirects: false,
+        // will not throw errors
+        validateStatus: (status) => true,
+        headers: {
+          'content-Type': 'application/json',
+          'authorization': "${sharedPreferences.getString('api_access_token')}"
+        },
+      ),
+    );
+    print(res);
   }
 
   @override
@@ -129,11 +146,11 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: ListView.builder(
                 physics: const PageScrollPhysics(),
-                itemCount: commentData.length,
+                itemCount: commentData?.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 0.0),
-                    child: commentData[index]['fk_user_id'] != userId
+                    child: commentData![index]['fk_user_id'] != userId
                         ? Stack(
                             alignment: Alignment.topLeft,
                             children: <Widget>[
@@ -141,10 +158,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                 padding: const EdgeInsets.fromLTRB(
                                     5.0, 5.0, 10.0, 5.0),
                                 child: Text(
-                                    commentData[index]['user']['name'] +
+                                    commentData![index]['user']['name'] +
                                         ' - ' +
                                         DateFormat('dd-MMM-yy').format(
-                                            DateTime.parse(commentData[index]
+                                            DateTime.parse(commentData![index]
                                                 ['created_at'])),
                                     textAlign: TextAlign.left,
                                     style: Styles.appSmallNormalText),
@@ -161,7 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                     child: Center(
                                         child: Text(
-                                            commentData[index]['comment'],
+                                            commentData![index]['comment'],
                                             textAlign: TextAlign.center,
                                             softWrap: false,
                                             maxLines: 5,
@@ -170,8 +187,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               )
                             ],
                           )
-                        : commentData[index]['api_documents'] != null &&
-                                commentData[index]['api_documents']
+                        : commentData![index]['api_documents'] != null &&
+                                commentData![index]['api_documents']
                                         ['file_extension'] ==
                                     'jpg'
                             ? Stack(
@@ -181,15 +198,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                       padding: const EdgeInsets.fromLTRB(
                                           20.0, 5.0, 5.0, 5.0),
                                       child: Text(
-                                          commentData[index]['user']['name'] +
+                                          commentData![index]['user']['name'] +
                                               ' - ' +
                                               DateFormat('dd-MMM-yy').format(
                                                   DateTime.parse(
-                                                      commentData[index]
+                                                      commentData![index]
                                                           ['created_at'])),
                                           textAlign: TextAlign.right,
                                           style: Styles.appSmallNormalText)),
-                                  commentData[index]['comment'] != "no_comment"
+                                  commentData![index]['comment'] != "no_comment"
                                       ? Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               20.0, 20.0, 5.0, 5.0),
@@ -203,7 +220,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ),
                                             child: Center(
                                                 child: Text(
-                                                    commentData[index]
+                                                    commentData![index]
                                                         ['comment'],
                                                     textAlign: TextAlign.center,
                                                     softWrap: false,
@@ -215,16 +232,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                           ))
                                       : const SizedBox(),
                                   Padding(
-                                    padding: commentData[index]['comment'] !=
+                                    padding: commentData![index]['comment'] !=
                                             "no_comment"
                                         ? const EdgeInsets.fromLTRB(
                                             20.0, 55.0, 5.0, 5.0)
                                         : const EdgeInsets.fromLTRB(
                                             20.0, 25.0, 5.0, 5.0),
                                     child: Image.network(
-                                        filePath +
+                                        filePath! +
                                             '/' +
-                                            commentData[index]['api_documents']
+                                            commentData![index]['api_documents']
                                                 ['file_name'],
                                         fit: BoxFit.fill,
                                         height: 100,
@@ -232,7 +249,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   )
                                 ],
                               )
-                            : commentData[index]['comment'] != "no_comment"
+                            : commentData![index]['comment'] != "no_comment"
                                 ? Stack(
                                     alignment: Alignment.topRight,
                                     children: <Widget>[
@@ -240,12 +257,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                             padding: const EdgeInsets.fromLTRB(
                                                 20.0, 5.0, 5.0, 5.0),
                                             child: Text(
-                                                commentData[index]['user']
+                                                commentData![index]['user']
                                                         ['name'] +
                                                     ' - ' +
                                                     DateFormat('dd-MMM-yy')
                                                         .format(DateTime.parse(
-                                                            commentData[index][
+                                                            commentData![index][
                                                                 'created_at'])),
                                                 textAlign: TextAlign.right,
                                                 style:
@@ -263,7 +280,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               ),
                                               child: Center(
                                                   child: Text(
-                                                      commentData[index]
+                                                      commentData![index]
                                                           ['comment'],
                                                       textAlign:
                                                           TextAlign.center,
@@ -296,11 +313,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 RaisedButton.icon(
                   onPressed: () {
-                    chooseImage(); // call choose image function
+                    getFileChoosen(); // call choose image function
                   },
                   icon: const Icon(Icons.folder_open),
                   label: const Text("CHOOSE IMAGE"),
-                  color: Colors.deepOrangeAccent,
+                  color: Colors.black12,
                   colorBrightness: Brightness.dark,
                 ),
                 const Padding(
@@ -358,7 +375,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: InkWell(
-                    onTap: () async {
+                    onTap: () {
                       if (messageController.text == '') {
                         print(checkboxValue.runtimeType);
                         final snackBar = SnackBar(
@@ -377,40 +394,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         } else {
                           status = '';
                         }
-                        // ignore: unrelated_type_equality_checks
-                        if (uploadimage == '') {
-                          filePath = '';
-                        } else {
-                          List<int> imageBytes = uploadimage.readAsBytesSync();
-                          filePath = base64Encode(imageBytes);
-                          print('Image : '+ filepath);
-                          /* filePath = uploadimage.path; */
-                        }
-
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        Response response;
-                        final Dio dio = Dio();
-                        dio.options.headers['content-Type'] =
-                            'application/json';
-                        dio.options.headers["authorization"] =
-                            "${sharedPreferences.getString('api_access_token')}";
-                        response = await dio.post(
-                            'http://49.248.144.235/lv/servolutions/api/save_chat_details',
-                            queryParameters: {
-                              'ticket_id': widget.text,
-                              'documents': filepath,
-                              'comment': message,
-                              'status': status
-                            });
-                        print(response.data.toString());
-
-                        if (response.data['status'] == true) {
-                          print(response.data);
-                          getTicketsDetail();
-                          messageController.text = '';
-                          checkboxValue = false;
-                        }
+                        TestUpload();
                       }
                     },
                     child: Container(

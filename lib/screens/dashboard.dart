@@ -317,7 +317,8 @@ class _dashboard extends State<dashboard> {
                   thickness: 1.0,
                 ),
                 ListTile(
-                  leading: const Icon(Icons.insert_drive_file_outlined, size: 35.0),
+                  leading:
+                      const Icon(Icons.insert_drive_file_outlined, size: 35.0),
                   title: Text(
                     'Tickets',
                     style: GoogleFonts.poppins(
@@ -445,14 +446,8 @@ class _dashboard extends State<dashboard> {
         'http://49.248.144.235/lv/servolutions/api/get_tickets_dashboard_data_of_user',
         queryParameters: {'user_id': sharedPreferences.getInt('user_id')});
     print(response.data['data'].runtimeType);
-    var counts = countsFromJson(response.toString());
+    print(response.data);
 
-    for (int i = 0; i < counts.data.length; i++) {
-      if (counts.data[i].name == 'Total') {
-        setState(() {
-          total = counts.data[i].count;
-        });
-      }
-    }
+  /*   print(total); */
   }
 }
