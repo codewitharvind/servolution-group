@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_new, deprecated_member_use
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,6 @@ import 'package:servolution/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path/path.dart';
-import 'package:async/async.dart';
-import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   final String text;
@@ -45,16 +41,13 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  
-  }
-
-  Future getUserData() async {
+  getUserData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     userId = sharedPreferences.getInt('user_id')!;
     print(userId);
   }
 
-  Future getTicketsDetail() async {
+  getTicketsDetail() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Response response;
     final Dio dio = Dio();
@@ -80,23 +73,15 @@ class _ChatScreenState extends State<ChatScreen> {
       type: FileType.custom,
       allowedExtensions: ['jpg', 'pdf', 'doc'],
     );
-
     if (selectedfile != null) {
-      print("*****************************");
-      print(selectedfile.files.single.path);
       setState(() {
         selectedFilePath = selectedfile.files.single.path;
       });
-      print("*****************************");
-    } else {
-      print("*****************************");
-      print('Picker close');
-      print("*****************************");
     }
   }
 
   TestUpload() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    /*  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final Dio dio = Dio();
     dio.options.headers['content-Type'] = 'application/json';
     dio.options.headers["authorization"] =
@@ -122,7 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       ),
     );
-    print(res);
+    print(res); */
   }
 
   @override
@@ -375,7 +360,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (messageController.text == '') {
                         print(checkboxValue.runtimeType);
                         final snackBar = SnackBar(
@@ -394,7 +379,38 @@ class _ChatScreenState extends State<ChatScreen> {
                         } else {
                           status = '';
                         }
-                        TestUpload();
+                        SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        final Dio dio = Dio();
+                        dio.options.headers['content-Type'] =
+                            'application/json';
+                        dio.options.headers["authorization"] =
+                            "${sharedPreferences.getString('api_access_token')}";
+                        var formData = FormData.fromMap({
+                          'ticket_id': widget.text,
+                          'comment': messageController.text,
+                          'status': status,
+                          'documents': await MultipartFile.fromFile(
+                              selectedFilePath.toString(),
+                              filename:
+                                  selectedFilePath.toString().split('/').last)
+                        });
+
+                        final res = await dio.post(
+                          'http://49.248.144.235/lv/servolutions/api/save_chat_details',
+                          data: formData,
+                          options: Options(
+                            followRedirects: false,
+                            // will not throw errors
+                            validateStatus: (status) => true,
+                            headers: {
+                              'content-Type': 'application/json',
+                              'authorization':
+                                  "${sharedPreferences.getString('api_access_token')}"
+                            },
+                          ),
+                        );
+                        print(res);
                       }
                     },
                     child: Container(
