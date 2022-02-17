@@ -85,11 +85,11 @@ class _TicketDetailState extends State<TicketDetail> {
         ),
         backgroundColor: const Color(0xfffcb913),
         iconTheme: const IconThemeData(color: Colors.black),
-        title: Center(
-            child: Text(
+        centerTitle: true,
+        title: Text(
           "TICKET DETAIL",
           style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
-        )),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 0.0),

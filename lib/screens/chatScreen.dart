@@ -1,10 +1,9 @@
-// ignore_for_file: unnecessary_new, deprecated_member_use
-
-import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servolution/screens/chatImage.dart';
+import 'package:servolution/screens/fileDownload.dart';
 import 'package:servolution/screens/ticketListPage.dart';
 import 'package:servolution/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
         });
     if (response.data['status'] == true) {
       print(response.data['filepath']);
+      print(response.data['data']['login_user_comment']);
       setState(() {
         commentData = response.data['data']['login_user_comment'];
         filePath = response.data['filepath'];
@@ -80,36 +80,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  TestUpload() async {
-    /*  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final Dio dio = Dio();
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers["authorization"] =
-        "${sharedPreferences.getString('api_access_token')}";
-    var formData = FormData.fromMap({
-      'ticket_id': widget.text,
-      'comment': 'hi',
-      'status': '6',
-      'documents': await MultipartFile.fromFile(selectedFilePath.toString(),
-          filename: selectedFilePath.toString().split('/').last)
-    });
-
-    final res = await dio.post(
-      'http://49.248.144.235/lv/servolutions/api/save_chat_details',
-      data: formData,
-      options: Options(
-        followRedirects: false,
-        // will not throw errors
-        validateStatus: (status) => true,
-        headers: {
-          'content-Type': 'application/json',
-          'authorization': "${sharedPreferences.getString('api_access_token')}"
-        },
-      ),
-    );
-    print(res); */
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,11 +91,11 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           backgroundColor: const Color(0xfffcb913),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Center(
-              child: Text(
+          centerTitle: true,
+          title: Text(
             "CHAT VIEW",
             style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
-          )),
+          ),
         ),
         body: Column(children: <Widget>[
           Expanded(
@@ -172,10 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               )
                             ],
                           )
-                        : commentData![index]['api_documents'] != null &&
-                                commentData![index]['api_documents']
-                                        ['file_extension'] ==
-                                    'jpg'
+                        : commentData![index]['api_documents'] != null
                             ? Stack(
                                 alignment: Alignment.topRight,
                                 children: <Widget>[
@@ -216,22 +183,71 @@ class _ChatScreenState extends State<ChatScreen> {
                                                         .appNormalChatText)),
                                           ))
                                       : const SizedBox(),
-                                  Padding(
-                                    padding: commentData![index]['comment'] !=
-                                            "no_comment"
-                                        ? const EdgeInsets.fromLTRB(
-                                            20.0, 55.0, 5.0, 5.0)
-                                        : const EdgeInsets.fromLTRB(
-                                            20.0, 25.0, 5.0, 5.0),
-                                    child: Image.network(
-                                        filePath! +
-                                            '/' +
-                                            commentData![index]['api_documents']
-                                                ['file_name'],
-                                        fit: BoxFit.fill,
-                                        height: 100,
-                                        width: 150),
-                                  )
+                                  commentData![index]['api_documents']
+                                              ['file_extension'] ==
+                                          'jpg'
+                                      ? Padding(
+                                          padding: commentData![index]['comment'] != "no_comment"
+                                              ? const EdgeInsets.fromLTRB(
+                                                  20.0, 55.0, 5.0, 5.0)
+                                              : const EdgeInsets.fromLTRB(
+                                                  20.0, 25.0, 5.0, 5.0),
+                                          child: InkWell(
+                                              onTap: () {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => ChatImage(
+                                                            text: filePath! +
+                                                                '/' +
+                                                                commentData![
+                                                                            index]
+                                                                        [
+                                                                        'api_documents']
+                                                                    [
+                                                                    'file_name'],
+                                                            id: widget.text)));
+                                              },
+                                              child: Image.network(
+                                                  filePath! +
+                                                      '/' +
+                                                      commentData![index]
+                                                              ['api_documents']
+                                                          ['file_name'],
+                                                  fit: BoxFit.fill,
+                                                  height: 100,
+                                                  width: 150)))
+                                      : Padding(
+                                          padding: commentData![index]['comment'] !=
+                                                  "no_comment"
+                                              ? const EdgeInsets.fromLTRB(20.0, 55.0, 5.0, 5.0)
+                                              : const EdgeInsets.fromLTRB(20.0, 25.0, 5.0, 5.0),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => FileDownload(
+                                                          text: filePath! +
+                                                              '/' +
+                                                              commentData![
+                                                                          index]
+                                                                      [
+                                                                      'api_documents']
+                                                                  ['file_name'],
+                                                          id: widget.text)));
+                                            },
+                                            child: Text(
+                                                commentData![index]
+                                                        ['api_documents']
+                                                    ['file_name'],
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                                maxLines: 5,
+                                                overflow: TextOverflow.ellipsis,
+                                                style:
+                                                    Styles.appNormalChatText),
+                                          ))
                                 ],
                               )
                             : commentData![index]['comment'] != "no_comment"
@@ -281,8 +297,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 }),
           ),
-          new Expanded(
-              child: new SingleChildScrollView(
+          Expanded(
+              child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -298,7 +314,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 RaisedButton.icon(
                   onPressed: () {
-                    getFileChoosen(); // call choose image function
+                    getFileChoosen();
                   },
                   icon: const Icon(Icons.folder_open),
                   label: const Text("CHOOSE IMAGE"),
@@ -396,7 +412,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   selectedFilePath.toString().split('/').last)
                         });
 
-                        final res = await dio.post(
+                        final response = await dio.post(
                           'http://49.248.144.235/lv/servolutions/api/save_chat_details',
                           data: formData,
                           options: Options(
@@ -410,7 +426,17 @@ class _ChatScreenState extends State<ChatScreen> {
                             },
                           ),
                         );
-                        print(res);
+                        if (response.data['status'] == true) {
+                          print(response);
+                          getTicketsDetail();
+                          final snackBar = SnackBar(
+                            content: Text('Data Uploaded',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 12.0, color: Colors.white)),
+                            backgroundColor: (const Color(0xfffcb913)),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
                       }
                     },
                     child: Container(

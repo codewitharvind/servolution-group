@@ -50,11 +50,11 @@ class MapScreenState extends State<ProfilePage>
           ),
           backgroundColor: const Color(0xfffcb913),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Center(
-              child: Text(
+          centerTitle: true,
+          title:  Text(
             "PROFILE",
             style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
-          )),
+          ),
         ),
         body: Container(
           color: Colors.white,

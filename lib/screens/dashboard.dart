@@ -67,25 +67,11 @@ class _dashboard extends State<dashboard> {
           appBar: AppBar(
             backgroundColor: const Color(0xfffcb913),
             iconTheme: const IconThemeData(color: Colors.black),
-            title: Center(
-                child: Text(
+            centerTitle: true,
+            title: Text(
               "M - AUDIT",
               style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
-            )),
-            actions: <Widget>[
-              IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    //  showSearch(context: context, delegate: DataSearch(listWords));
-                  })
-            ],
-            /*  bottom: TabBar(
-              tabs: [
-                Tab(text: "Total $total"),
-                Tab(text: "Pending"),
-                Tab(text: "Completed")
-              ],
-            ), */
+            ),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,10 +82,10 @@ class _dashboard extends State<dashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
+                      padding: const EdgeInsets.fromLTRB(20.0, 20.0, 00.0, 0.0),
                       child: RichText(
                         text: const TextSpan(
-                          text: 'From Date',
+                          text: 'From',
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
@@ -108,45 +94,63 @@ class _dashboard extends State<dashboard> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
-                      child: Text(
-                        _date1,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14.0,
-                          color: Colors.black,
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 0.0),
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 0.0, 10),
+                        child: Text(
+                          _date1,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
-                      child: IconButton(
-                        icon: const Icon(Icons.calendar_today),
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              theme: const DatePickerTheme(
-                                containerHeight: 210.0,
-                              ),
-                              showTitleActions: true,
-                              maxTime: DateTime(2025, 12, 31),
-                              onConfirm: (date) {
-                            print('confirm $date');
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(180.0, 0.0, 0.0, 00.0),
+                        child: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          alignment: Alignment.centerRight,
+                          onPressed: () {
+                            DatePicker.showDatePicker(context,
+                                theme: const DatePickerTheme(
+                                  containerHeight: 210.0,
+                                ),
+                                showTitleActions: true,
+                                maxTime: DateTime(2025, 12, 31),
+                                onConfirm: (date) {
+                              print('confirm $date');
 
-                            var selectedFirstDate =
-                                DateFormat('dd-MM-yyyy').format(date);
-                            setState(() {
-                              _date1 = selectedFirstDate;
-                            });
+                              var selectedFirstDate =
+                                  DateFormat('dd-MM-yyyy').format(date);
+                              setState(() {
+                                _date1 = selectedFirstDate;
+                              });
+                            },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.en);
                           },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -155,10 +159,10 @@ class _dashboard extends State<dashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 00.0, 0.0),
+                      padding: const EdgeInsets.fromLTRB(20.0, 20.0, 00.0, 0.0),
                       child: RichText(
                         text: const TextSpan(
-                          text: 'End Date',
+                          text: 'To',
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
@@ -167,50 +171,67 @@ class _dashboard extends State<dashboard> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 0.0, 10),
-                      child: Text(
-                        _date2,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 00.0),
-                      child: IconButton(
-                        icon: const Icon(Icons.calendar_today),
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              theme: const DatePickerTheme(
-                                containerHeight: 210.0,
-                              ),
-                              showTitleActions: true,
-                              minTime: DateTime.now(),
-                              maxTime: DateTime(2025, 12, 31),
-                              onConfirm: (date) {
-                            print('confirm $date');
-
-                            var selectedEndDate =
-                                DateFormat('dd-MM-yyyy').format(date);
-                            setState(() {
-                              _date2 = selectedEndDate;
-                            });
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        },
-                      ),
-                    ),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 0.0),
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 0.0, 10),
+                        child: Text(
+                          _date2,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(180.0, 0.0, 0.0, 00.0),
+                        child: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () {
+                            DatePicker.showDatePicker(context,
+                                theme: const DatePickerTheme(
+                                  containerHeight: 210.0,
+                                ),
+                                showTitleActions: true,
+                                minTime: DateTime.now(),
+                                maxTime: DateTime(2025, 12, 31),
+                                onConfirm: (date) {
+                              print('confirm $date');
+
+                              var selectedEndDate =
+                                  DateFormat('dd-MM-yyyy').format(date);
+                              setState(() {
+                                _date2 = selectedEndDate;
+                              });
+                            },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.en);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 30.0, 0.0, 10.0),
                 child: InkWell(
                   onTap: () async {
                     if (_date1 == 'Select Date') {
@@ -246,6 +267,7 @@ class _dashboard extends State<dashboard> {
                   },
                   child: Container(
                     height: 40.0,
+                    width: 180.0,
                     decoration: BoxDecoration(
                       color: const Color(0xfffcb913),
                       borderRadius: BorderRadius.circular(30.0),
@@ -350,51 +372,10 @@ class _dashboard extends State<dashboard> {
               ],
             ),
           ),
-          /*  drawer: Drawer(
-              child: ListView(
-            children: <Widget>[
-              ListTile(
-                title: Text("Profile",
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: Colors.black)),
-                trailing: const Icon(Icons.person),
-                onTap: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfilePage())),
-              ),
-              const Divider(
-                thickness: 1.0,
-              ),
-              ListTile(
-                title: Text("Tickets",
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: Colors.black)),
-                trailing: const Icon(Icons.insert_drive_file_rounded),
-                onTap: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TicketList())),
-              ),
-              const Divider(
-                thickness: 1.0,
-              ),
-              ListTile(
-                  title: Text(
-                    "Logout",
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: Colors.black),
-                  ),
-                  trailing: const Icon(Icons.logout),
-                  onTap: () async {
-                    
-                  }),
-            ],
-          )), */
         ));
   }
 
-  Future getDateRange() async {
+  getDateRange() {
     print(_date1);
     print(_date2);
   }
@@ -434,7 +415,7 @@ class _dashboard extends State<dashboard> {
     }
   }
 
-  Future getTicketsstatus() async {
+  getTicketsstatus() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Response response;
@@ -448,6 +429,6 @@ class _dashboard extends State<dashboard> {
     print(response.data['data'].runtimeType);
     print(response.data);
 
-  /*   print(total); */
+    /*   print(total); */
   }
 }

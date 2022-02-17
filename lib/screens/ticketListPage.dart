@@ -62,22 +62,21 @@ class _TicketListState extends State<TicketList> {
           ),
           backgroundColor: const Color(0xfffcb913),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Center(
-              child: Text(
+          title:  Text(
             "TICKET LIST",
             style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
-          )),
+          ),
         ),
         body: ListView.builder(
             physics: const PageScrollPhysics(),
             itemCount: count,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 0.0),
                 child: Card(
                   elevation: 9,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: InkWell(
                     onTap: () {
