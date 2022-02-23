@@ -27,9 +27,21 @@ abstract class Styles {
     ),
   );
 
+  static const appSmallText = TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.normal,
+      fontSize: 10.0,
+      color: Colors.black);
+
   static const appSmallNormalText = TextStyle(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.normal,
+      fontSize: 12.0,
+      color: Colors.black);
+
+  static const appSmallBoldText = TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.bold,
       fontSize: 12.0,
       color: Colors.black);
 
@@ -38,4 +50,12 @@ abstract class Styles {
       fontWeight: FontWeight.w600,
       fontSize: 14.0,
       color: Colors.black);
+
+  static const appHorizontalDivider = Padding(
+    padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+    child: Divider(
+      color: Color(0xFFcccccc),
+      thickness: 0.7,
+    ),
+  );
 }

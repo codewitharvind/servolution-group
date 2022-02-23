@@ -46,6 +46,10 @@ dependencies:
   file_picker: ^4.4.0
   photo_view: ^0.13.0
   flutter_downloader: ^1.7.2
+  flowder: ^0.2.0
+  flutter_cache_manager: ^3.3.0
+  path_provider: ^2.0.9
+  chat_bubbles: ^1.1.0
 
 
 dev_dependencies:

@@ -62,7 +62,7 @@ class _TicketListState extends State<TicketList> {
           ),
           backgroundColor: const Color(0xfffcb913),
           iconTheme: const IconThemeData(color: Colors.black),
-          title:  Text(
+          title: Text(
             "TICKET LIST",
             style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
           ),
@@ -97,7 +97,7 @@ class _TicketListState extends State<TicketList> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
-                                    10.0, 10.0, 5.0, 5.0),
+                                    10.0, 10.0, 5.0, 0.0),
                                 child: Text(
                                     '#' +
                                         dataList[index]['ticket_number']
@@ -105,8 +105,8 @@ class _TicketListState extends State<TicketList> {
                                     textAlign: TextAlign.left,
                                     style: const TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
                                         color: Colors.black)),
                               ),
                             ],
@@ -116,41 +116,49 @@ class _TicketListState extends State<TicketList> {
                           padding:
                               const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 0.0),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 5.0, 0.0, 0.0),
                                 child: Text(
-                                  'ATM No. / Site ID',
-                                  style: TextStyle(
+                                  dataList[index]['created_at'],
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 12.0,
+                                    fontSize: 14.0,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
-                                    5.0, 0.0, 10.0, 0.0),
+                                    35.0, 5.0, 0.0, 0.0),
                                 child: Container(
-                                  height: 35.0,
-                                  width: 80.0,
+                                  width: 7,
+                                  height: 7,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xfffcb913),
-                                    borderRadius: BorderRadius.circular(30.0),
+                                    shape: BoxShape.circle,
+                                    color:
+                                        dataList[index]['status_name'] == "Open"
+                                            ? Colors.green
+                                            : const Color(0xfffcb913),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      dataList[index]['status_name'] ?? '',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 12.0,
-                                          color: Colors.black),
-                                    ),
-                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 5.0, 0.0, 0.0),
+                                child: Text(
+                                  dataList[index]['status_name'] ?? '',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14.0,
+                                      color: dataList[index]['status_name'] ==
+                                              "Open"
+                                          ? Colors.green
+                                          : const Color(0xfffcb913)),
                                 ),
                               ),
                             ],
@@ -158,41 +166,53 @@ class _TicketListState extends State<TicketList> {
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    10.0, 5.0, 0.0, 10.0),
-                                child: Text(
-                                  dataList[index]['atm_no'] +
-                                      ' / ' +
-                                      dataList[index]['site_id'],
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.0,
-                                    color: Colors.grey,
+                              const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                          child: Container(
+                            height: 30.0,
+                            decoration: const BoxDecoration(
+                              color: Color(0xfffcb913),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15.0),
+                                bottomRight: Radius.circular(15.0),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      30.0, 5.0, 0.0, 0.0),
+                                  child: Text(
+                                    'ATM No. ' + dataList[index]['atm_no'],
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13.0,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    80.0, 5.0, 10.0, 10.0),
-                                child: Text(
-                                  dataList[index]['created_at'],
-                                  textAlign: TextAlign.right,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 12.0,
-                                    color: Colors.grey,
+                                const VerticalDivider(
+                                  thickness: 2,
+                                  width: 20,
+                                  color: Colors.black,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0.0, 5.0, 40.0, 0.0),
+                                  child: Text(
+                                    'Site ID: ' + dataList[index]['site_id'],
+                                    textAlign: TextAlign.right,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13.0,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
