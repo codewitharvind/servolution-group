@@ -17,7 +17,6 @@ class TicketDetail extends StatefulWidget {
 
 class _TicketDetailState extends State<TicketDetail> {
   late SharedPreferences sharedPreferences;
-  late List<dynamic> commentData;
   late String ticketNumber = '',
       atmNumber = '',
       atmSerialNumber = '',
@@ -63,7 +62,6 @@ class _TicketDetailState extends State<TicketDetail> {
         executiveName = response.data['data']['ticket']['executive_name'];
         executiveNumber = response.data['data']['ticket']['executive_number'];
         status = response.data['data']['ticket']['status'];
-        commentData = response.data['data']['comments_and_files'];
         filePath = response.data['filepath'];
         serviceName = response.data['data']['ticket_errors'].length != 0
             ? response.data['data']['ticket_errors'][0]['service_name']
@@ -72,7 +70,6 @@ class _TicketDetailState extends State<TicketDetail> {
             ? response.data['data']['ticket_errors'][0]['error_type']
             : '-';
       });
-      print(commentData.runtimeType);
     }
   }
 
