@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servolution/screens/categoryList.dart';
 import 'package:servolution/screens/chatScreen.dart';
 import 'package:servolution/screens/ticketListPage.dart';
 import 'package:servolution/utils/styles.dart';
@@ -89,6 +90,7 @@ class _TicketDetailState extends State<TicketDetail> {
     if (response.data['status'] == true) {
       setState(() {
         dataList = response.data['data'];
+        count = response.data['data'].length;
       });
       print("@@@@@@@@@@@");
       print(response.data['data']);
@@ -442,6 +444,58 @@ class _TicketDetailState extends State<TicketDetail> {
                     ],
                   ),
                 ),
+              ),
+              Column(
+                children: [
+                  for (var service
+                      in dataList) /* Text(service['service_name'].toString() */
+                    Container(
+                      padding:
+                          const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 0.0),
+                      child: Card(
+                        elevation: 9,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CategoryList(
+                                        text: service['id'])));
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10.0, 10.0, 5.0, 0.0),
+                                      child: Text( service['service_name']
+                                                  .toString(),
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20.0,
+                                              color: Colors.black)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10.0, 20.0, 180.0, 5.0),
