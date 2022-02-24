@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:servolution/styles.dart';
+import 'package:servolution/utils/styles.dart';
 
 bool _isLoading = true;
 

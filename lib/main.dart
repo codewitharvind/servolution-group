@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:servolution/screens/dashboard.dart';
-import 'package:servolution/styles.dart';
+import 'package:servolution/utils/styles.dart';
 
 void main() {
   runApp(const MyApp());
