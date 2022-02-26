@@ -32,12 +32,13 @@ class _TicketDetailState extends State<TicketDetail> {
       status = '',
       serviceName = '',
       filePath = '',
-      errorTypes = '';
+      errorTypes = '',
+      serviceId = '',
+      ticketId = '';
   @override
   void initState() {
     super.initState();
     getTicketsDetail();
-    getCategoryDetail();
   }
 
   @override
@@ -58,8 +59,12 @@ class _TicketDetailState extends State<TicketDetail> {
           'ticket_id': widget.text,
         });
     if (response.data['status'] == true) {
+      print(response);
       setState(() {
+        ticketId = response.data['data']['ticket']['id'].toString();
         ticketNumber = response.data['data']['ticket']['ticket_number'];
+        serviceId =
+            response.data['data']['ticket']['fk_service_type'].toString();
         atmNumber = response.data['data']['ticket']['atm_no'];
         atmSerialNumber = response.data['data']['ticket']['atm_sr_no'];
         atmSiteId = response.data['data']['ticket']['site_id'];
@@ -68,33 +73,8 @@ class _TicketDetailState extends State<TicketDetail> {
         executiveNumber = response.data['data']['ticket']['executive_number'];
         status = response.data['data']['ticket']['status_name'];
         filePath = response.data['filepath'];
-        serviceName = response.data['data']['ticket_errors'].length != 0
-            ? response.data['data']['ticket_errors'][0]['service_name']
-            : '-';
-        errorTypes = response.data['data']['ticket_errors'].length != 0
-            ? response.data['data']['ticket_errors'][0]['error_type']
-            : '-';
+        serviceName = response.data['data']['ticket']['service_name'];
       });
-    }
-  }
-
-  getCategoryDetail() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    Response response;
-    final Dio dio = Dio();
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers["authorization"] =
-        "${sharedPreferences.getString('api_access_token')}";
-    response = await dio.post(
-        'http://49.248.144.235/lv/servolutions/api/get-service-categories');
-    if (response.data['status'] == true) {
-      setState(() {
-        dataList = response.data['data'];
-        count = response.data['data'].length;
-      });
-      print("@@@@@@@@@@@");
-      print(response.data['data']);
-      print("@@@@@@@@@@@");
     }
   }
 
@@ -409,7 +389,7 @@ class _TicketDetailState extends State<TicketDetail> {
                           ],
                         ),
                       ),
-                      Styles.appHorizontalDivider,
+                      /*        Styles.appHorizontalDivider,
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),
@@ -440,106 +420,102 @@ class _TicketDetailState extends State<TicketDetail> {
                             ),
                           ],
                         ),
-                      ),
+                      ), */
                     ],
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  for (var service
-                      in dataList) /* Text(service['service_name'].toString() */
-                    Container(
-                      padding:
-                          const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 0.0),
-                      child: Card(
-                        elevation: 9,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+              Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 50.0, 10.0, 5.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CategoryList(
+                                    service: serviceId, text: ticketId)));
+                      },
+                      child: Container(
+                        height: 30.0,
+                        width: 240.0,
+                        decoration: BoxDecoration(
+                          color: const Color(0xfffcb913),
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CategoryList(
-                                        text: service['id'])));
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10.0, 10.0, 5.0, 0.0),
-                                      child: Text( service['service_name']
-                                                  .toString(),
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20.0,
-                                              color: Colors.black)),
-                                    ),
-                                  ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                              child: Icon(Icons.comment_sharp),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  10.0, 0.0, 10.0, 0.0),
+                              child: Center(
+                                child: Text(
+                                  'QUESTIONNAIRE',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 15.0,
+                                      color: Colors.black),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 20.0, 180.0, 5.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChatScreen(text: widget.text)));
-                  },
-                  child: Container(
-                    height: 30.0,
-                    width: 210.0,
-                    decoration: BoxDecoration(
-                      color: const Color(0xfffcb913),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const <Widget>[
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Icon(Icons.chat_bubble),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatScreen(text: widget.text)));
+                      },
+                      child: Container(
+                        height: 30.0,
+                        width: 240.0,
+                        decoration: BoxDecoration(
+                          color: const Color(0xfffcb913),
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                          child: Center(
-                            child: Text(
-                              'CHAT NOW!',
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 15.0,
-                                  color: Colors.black),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                              child: Icon(Icons.chat_bubble),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  10.0, 0.0, 10.0, 0.0),
+                              child: Center(
+                                child: Text(
+                                  'COMMENT AND STATUS',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 15.0,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

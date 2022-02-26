@@ -1,22 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servolution/screens/categoryQuestion.dart';
 import 'package:servolution/screens/subCategorylist.dart';
-import 'package:servolution/screens/ticketDetailPage.dart';
 import 'package:servolution/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CategoryList extends StatefulWidget {
-  final String text;
-  final String service;
-  const CategoryList({Key? key, required this.service, required this.text})
-      : super(key: key);
+class MicroCategory extends StatefulWidget {
+  const MicroCategory({Key? key}) : super(key: key);
 
   @override
-  _CategoryListState createState() => _CategoryListState();
+  State<MicroCategory> createState() => _MicroCategoryState();
 }
 
-class _CategoryListState extends State<CategoryList> {
+class _MicroCategoryState extends State<MicroCategory> {
   late SharedPreferences sharedPreferences;
   late List<dynamic> dataList;
   int count = 0;
@@ -24,10 +21,10 @@ class _CategoryListState extends State<CategoryList> {
   @override
   void initState() {
     super.initState();
-    getCategory();
+    getMicroCategory();
   }
 
-  getCategory() async {
+  getMicroCategory() async {
     sharedPreferences = await SharedPreferences.getInstance();
     Response response;
     final Dio dio = Dio();
@@ -35,12 +32,13 @@ class _CategoryListState extends State<CategoryList> {
     dio.options.headers["authorization"] =
         "${sharedPreferences.getString('api_access_token')}";
     response = await dio.post(
-        'http://49.248.144.235/lv/servolutions/api/get-service-categories',
+        'http://49.248.144.235/lv/servolutions/api/get-micro-categories',
         queryParameters: {
-          'service_id': widget.service,
+          'sub_category_id': sharedPreferences.getString('subCategory'),
         });
     if (response.data['status'] == true) {
       print(response.data['data']);
+      print(sharedPreferences.getString('subCategory'));
       setState(() {
         dataList = response.data['data'];
         count = dataList.length;
@@ -59,18 +57,15 @@ class _CategoryListState extends State<CategoryList> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TicketDetail(
-                        text: widget.text,
-                      ))),
-        ),
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SubCategoryList()))),
         backgroundColor: const Color(0xfffcb913),
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          "CATEGORY LIST",
+          "MICRO CATEGORY LIST",
           style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
         ),
       ),
@@ -93,19 +88,16 @@ class _CategoryListState extends State<CategoryList> {
                       onTap: () async {
                         sharedPreferences =
                             await SharedPreferences.getInstance();
-                        await sharedPreferences.setString('category',
-                            dataList[index]['category_id'].toString());
-                        await sharedPreferences.setString(
-                            'service', widget.service);
-                        await sharedPreferences.setString(
-                            'ticket', widget.text);
+                        await sharedPreferences.setString('microcategory',
+                            dataList[index]['micro_category_id'].toString());
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SubCategoryList()));
+                                builder: (context) =>
+                                    const CategoryQuestion()));
                       },
                       child: Text(
-                        dataList[index]['category_name'].toString(),
+                        dataList[index]['micro_category_name'].toString(),
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                             fontFamily: 'Poppins',

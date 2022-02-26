@@ -6,8 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/response/dashboardResponse.dart';
 import 'package:servolution/response/daterangeResponse.dart';
 import 'package:servolution/screens/ProfilePage.dart';
+import 'package:servolution/screens/csrScreen.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:servolution/screens/ticketListPage.dart';
+import 'package:servolution/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -289,6 +291,34 @@ class _dashboard extends State<dashboard> {
                     ),
                   ),
                 ),
+               /*  Container(
+                  padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+                  child: Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListView.builder(
+                        shrinkWrap: false,
+                        itemCount: 4,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const <Widget>[
+                              Text(
+                                'fdsfdsfdsff',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15.0,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                ), */
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 20.0, 00.0, 0.0),
                   child: RichText(
@@ -379,6 +409,21 @@ class _dashboard extends State<dashboard> {
                   ),
                 ),
                 ListTile(
+                  leading: const Icon(Icons.contact_page_outlined, size: 35.0),
+                  title: Text(
+                    'CSR',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CSRModule()));
+                  },
+                ),
+                Styles.appHorizontalDivider,
+                ListTile(
                   leading: const Icon(Icons.person_outline, size: 35.0),
                   title: Text(
                     'Profile',
@@ -392,9 +437,7 @@ class _dashboard extends State<dashboard> {
                             builder: (context) => const ProfilePage()));
                   },
                 ),
-                const Divider(
-                  thickness: 1.0,
-                ),
+                Styles.appHorizontalDivider,
                 ListTile(
                   leading:
                       const Icon(Icons.insert_drive_file_outlined, size: 35.0),
@@ -410,9 +453,7 @@ class _dashboard extends State<dashboard> {
                             builder: (context) => const TicketList()));
                   },
                 ),
-                const Divider(
-                  thickness: 1.0,
-                ),
+                Styles.appHorizontalDivider,
                 ListTile(
                   leading: const Icon(Icons.power_settings_new, size: 35.0),
                   title: Text(
@@ -512,7 +553,7 @@ class _dashboard extends State<dashboard> {
           'start_date': _date1 == 'Select From Date' ? formattedDate : _date1,
           'end_date': _date2 == 'Select End Date' ? formattedDate : _date2
         });
-    print(response);
+    print(response.data['data'].runtimeType);
     final daterangeResponse = dateRangeResponseFromJson(response.toString());
     setState(() {
       serviceMap = {

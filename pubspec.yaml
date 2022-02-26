@@ -50,6 +50,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   path_provider: ^2.0.9
   chat_bubbles: ^1.1.0
+  image_picker: ^0.8.4+9
 
 
 dev_dependencies:
