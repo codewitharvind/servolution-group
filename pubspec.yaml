@@ -51,6 +51,7 @@ dependencies:
   path_provider: ^2.0.9
   chat_bubbles: ^1.1.0
   image_picker: ^0.8.4+9
+  multi_image_picker2: ^5.0.02
 
 
 dev_dependencies:

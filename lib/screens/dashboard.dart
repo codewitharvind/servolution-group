@@ -291,34 +291,100 @@ class _dashboard extends State<dashboard> {
                     ),
                   ),
                 ),
-               /*  Container(
+                /*  Container(
                   padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-                  child: Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: ListView.builder(
-                        shrinkWrap: false,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const <Widget>[
-                              Text(
-                                'fdsfdsfdsff',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.0,
-                                    color: Colors.black),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 4,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Center(
+                                      child: Text("Data 1 Title"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Center(
+                                      child: Text("Total: 25"),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          );
-                        }),
-                  ),
+                          ),
+                        );
+                      }),
                 ), */
+                Center(
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: 4,
+                    itemBuilder: (ctx, i) {
+                      return Card(
+                        color: Colors.blueGrey.shade300,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          margin: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
+                          child: Stack(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: const [
+                                 Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 20.0, 00.0, 0.0),
+                                    child: Center(
+                                    child: Text(
+                                      'CCTV',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 10.0, 00.0, 0.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Total: 25',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.0,
+                      crossAxisSpacing: 0.0,
+                      mainAxisSpacing: 5,
+                      mainAxisExtent: 100,
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 20.0, 00.0, 0.0),
                   child: RichText(
@@ -409,21 +475,6 @@ class _dashboard extends State<dashboard> {
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.contact_page_outlined, size: 35.0),
-                  title: Text(
-                    'CSR',
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.0, color: Colors.black),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CSRModule()));
-                  },
-                ),
-                Styles.appHorizontalDivider,
-                ListTile(
                   leading: const Icon(Icons.person_outline, size: 35.0),
                   title: Text(
                     'Profile',
@@ -451,6 +502,21 @@ class _dashboard extends State<dashboard> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const TicketList()));
+                  },
+                ),
+                Styles.appHorizontalDivider,
+                ListTile(
+                  leading: const Icon(Icons.contact_page_outlined, size: 35.0),
+                  title: Text(
+                    'CSR',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CSRModule()));
                   },
                 ),
                 Styles.appHorizontalDivider,

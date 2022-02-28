@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/screens/subCategoryList.dart';
+import 'package:servolution/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryQuestion extends StatefulWidget {
@@ -99,7 +100,7 @@ class _CategoryQuestionState extends State<CategoryQuestion> {
           style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
         ),
       ),
-      body: ListView.builder(
+      body: /* ListView.builder(
         physics: const PageScrollPhysics(),
         itemCount: count,
         itemBuilder: (BuildContext context, int index) {
@@ -206,6 +207,114 @@ class _CategoryQuestionState extends State<CategoryQuestion> {
             ),
           );
         },
+      ), */
+          Container(
+        padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: ListView.builder(
+            itemCount: count,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 7,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                10.0, 10.0, 5.0, 10.0),
+                            child: Text(dataList[index]['question'].toString(),
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14.0,
+                                    color: Colors.black)),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 5.0),
+                          child: InkWell(
+                            onTap: () {
+                              submitCategoryAnswer(
+                                  'Yes', dataList[index]['question_id']);
+                            },
+                            child: Container(
+                              height: 30.0,
+                              width: 60.0,
+                              decoration: BoxDecoration(
+                                color: const Color(0xfffcb913),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const <Widget>[
+                                  Center(
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(5.0, 10.0, 10.0, 5.0),
+                          child: InkWell(
+                            onTap: () {
+                              submitCategoryAnswer(
+                                  'No', dataList[index]['question_id']);
+                            },
+                            child: Container(
+                              height: 30.0,
+                              width: 70.0,
+                              decoration: BoxDecoration(
+                                color: const Color(0xfffcb913),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const <Widget>[
+                                  Center(
+                                    child: Text(
+                                      'No',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Styles.appHorizontalDivider,
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
