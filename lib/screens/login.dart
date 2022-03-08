@@ -97,6 +97,7 @@ class _loginState extends State<login> {
                       padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                       child: TextFormField(
                         controller: usernameController,
+                        validator: validateUser,
                         style: GoogleFonts.poppins(
                             fontSize: 15.0, color: const Color(0xff6b6c6e)),
                         cursorColor: Theme.of(context).cursorColor,
@@ -118,6 +119,7 @@ class _loginState extends State<login> {
                       child: TextFormField(
                         obscureText: true,
                         controller: passwordController,
+                        validator: validatePassword,
                         style: GoogleFonts.poppins(
                             fontSize: 15.0, color: const Color(0xff6b6c6e)),
                         cursorColor: Theme.of(context).cursorColor,
@@ -140,46 +142,8 @@ class _loginState extends State<login> {
                         onPressed: _isLoading
                             ? null
                             : () async {
-                                if (usernameController.text == '') {
-                                  // ignore: avoid_print
-                                  print("username empty");
-                                  final snackBar = SnackBar(
-                                    content: Text(
-                                        'Username Should Not Be Empty',
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 12.0,
-                                            color: Colors.black)),
-                                    backgroundColor: (const Color(0xfffcb913)),
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (passwordController.text == '') {
-                                  // ignore: avoid_print
-                                  print("password empty");
-                                  final snackBar = SnackBar(
-                                    content: Text(
-                                        'Password Should Not Be Empty',
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 12.0,
-                                            color: Colors.black)),
-                                    // ignore: prefer_const_constructors
-                                    backgroundColor: (Color(0xfffcb913)),
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (usernameController.text == '' &&
-                                    passwordController.text == '') {
-                                  final snackBar = SnackBar(
-                                    content: Text(
-                                        'Username And Password Required',
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 12.0,
-                                            color: Colors.black)),
-                                    backgroundColor: (const Color(0xfffcb913)),
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
                                   setState(() => _isLoading = true);
                                   String username = usernameController.text;
                                   String password = passwordController.text;
@@ -192,13 +156,9 @@ class _loginState extends State<login> {
                                         'email': username,
                                         'password': password
                                       });
-                                  print(response.data.toString());
 
                                   if (response.data['status'] == true) {
-                                    print('Success');
-
                                     int userId, status;
-
                                     String name,
                                         email,
                                         contactNumber,
@@ -222,7 +182,6 @@ class _loginState extends State<login> {
 
                                     apiAccessToken =
                                         response.data['api_access_token'];
-                                    print(apiAccessToken);
 
                                     SharedPreferences sharedPreferences =
                                         await SharedPreferences.getInstance();
@@ -242,9 +201,6 @@ class _loginState extends State<login> {
                                         'date_of_joining', dateOfJoining);
                                     await sharedPreferences.setString(
                                         'api_access_token', apiAccessToken);
-
-                                    print('printing-from-sharedpreferences');
-                                    print(sharedPreferences.get('user_id'));
                                     setState(() => _isLoading = false);
                                     // navigate user to dashboard screen on API success response
                                     Navigator.pushReplacement(
@@ -263,8 +219,6 @@ class _loginState extends State<login> {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   } else {
-                                    // _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('Assign a GlobalKey to the Scaffold')));
-                                    print(response.data['message']);
                                     setState(() => _isLoading = false);
                                     final snackBar = SnackBar(
                                       content: Text(response.data['message'],
@@ -329,13 +283,16 @@ class _loginState extends State<login> {
             )));
   }
 
-  String? validatePassword(String value) {
-    String patttern = r'(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$)';
-    RegExp regExp = RegExp(patttern);
-    if (value.isEmpty) {
-      return "New Password is required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Password not in proper format";
+  String? validateUser(String? value) {
+    if (value!.isEmpty) {
+      return "Username is required";
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value!.isEmpty) {
+      return "Password is required";
     }
     return null;
   }

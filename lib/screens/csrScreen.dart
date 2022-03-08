@@ -1,13 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:servolution/screens/csrLabels.dart';
-import 'package:servolution/screens/csrService.dart';
+import 'package:servolution/screens/HSK_House_Keeping.dart';
 import 'package:servolution/screens/dashboard.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CSRModule extends StatefulWidget {
@@ -91,7 +88,7 @@ class _CSRModuleState extends State<CSRModule> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CSRService()));
+                              builder: (context) => const HSK_House_keeping()));
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

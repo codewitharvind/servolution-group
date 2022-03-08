@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servolution/response/dashboardResponse.dart';
 import 'package:servolution/response/daterangeResponse.dart';
+import 'package:servolution/screens/Hsk_House_Keeping.dart';
+import 'package:servolution/screens/Hsk_Ticket_Listing.dart';
 import 'package:servolution/screens/ProfilePage.dart';
-import 'package:servolution/screens/csrScreen.dart';
 import 'package:servolution/screens/login.dart';
+import 'package:servolution/screens/notificationInfo.dart';
 import 'package:servolution/screens/ticketListPage.dart';
+import 'package:servolution/screens/uploadCsr.dart';
 import 'package:servolution/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -80,6 +83,20 @@ class _dashboard extends State<dashboard> {
               "M - AUDIT",
               style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.notifications,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationInfo()));
+                },
+              )
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -291,100 +308,6 @@ class _dashboard extends State<dashboard> {
                     ),
                   ),
                 ),
-                /*  Container(
-                  padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 4,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Center(
-                                      child: Text("Data 1 Title"),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Center(
-                                      child: Text("Total: 25"),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                ), */
-                Center(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: 4,
-                    itemBuilder: (ctx, i) {
-                      return Card(
-                        color: Colors.blueGrey.shade300,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          margin: const EdgeInsets.all(5),
-                          padding: const EdgeInsets.all(5),
-                          child: Stack(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: const [
-                                 Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 00.0, 0.0),
-                                    child: Center(
-                                    child: Text(
-                                      'CCTV',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 10.0, 00.0, 0.0),
-                                    child: Center(
-                                      child: Text(
-                                        'Total: 25',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.0,
-                      crossAxisSpacing: 0.0,
-                      mainAxisSpacing: 5,
-                      mainAxisExtent: 100,
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 20.0, 00.0, 0.0),
                   child: RichText(
@@ -493,7 +416,7 @@ class _dashboard extends State<dashboard> {
                   leading:
                       const Icon(Icons.insert_drive_file_outlined, size: 35.0),
                   title: Text(
-                    'Tickets',
+                    'FLM TICKETS',
                     style: GoogleFonts.poppins(
                         fontSize: 15.0, color: Colors.black),
                   ),
@@ -501,23 +424,70 @@ class _dashboard extends State<dashboard> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const TicketList()));
+                            builder: (context) => TicketList("")));
                   },
                 ),
                 Styles.appHorizontalDivider,
-                ListTile(
-                  leading: const Icon(Icons.contact_page_outlined, size: 35.0),
+                ExpansionTile(
+                  leading: const Icon(
+                    Icons.wysiwyg_outlined,
+                    size: 35.0,
+                    color: Colors.black45,
+                  ),
                   title: Text(
-                    'CSR',
+                    "HSK TICKET",
                     style: GoogleFonts.poppins(
                         fontSize: 15.0, color: Colors.black),
                   ),
-                  onTap: () {
-                    Navigator.pushReplacement(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Hsk_Ticket_Listing()));
+                          },
+                          child: Text(
+                            'Ticket Listing',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15.0, color: Colors.black),
+                          ),
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HSK_House_keeping()));
+                          },
+                          child: Text(
+                            'House Keeping',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15.0, color: Colors.black),
+                          ),
+                        )),
+                        Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                        child: GestureDetector(
+                          onTap: () {
+                           Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CSRModule()));
-                  },
+                            builder: (context) =>  uploadCsr()));
+                          },
+                          child: Text(
+                            'Upload CSR',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15.0, color: Colors.black),
+                          ),
+                        )),
+                  ],
                 ),
                 Styles.appHorizontalDivider,
                 ListTile(
@@ -533,6 +503,21 @@ class _dashboard extends State<dashboard> {
                         context); // Logout() called to clear the data stored in the shared perferences of People Manager.
                   },
                 ),
+                /* Styles.appHorizontalDivider,
+                ListTile(
+                  leading: const Icon(Icons.power_settings_new, size: 35.0),
+                  title: Text(
+                    'CSR',
+                    style: GoogleFonts.poppins(
+                        fontSize: 15.0, color: Colors.black),
+                  ),
+                  onTap: () {
+                     Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CSRModule()));
+                  },
+                ), */
               ],
             ),
           ),
@@ -619,7 +604,7 @@ class _dashboard extends State<dashboard> {
           'start_date': _date1 == 'Select From Date' ? formattedDate : _date1,
           'end_date': _date2 == 'Select End Date' ? formattedDate : _date2
         });
-    print(response.data['data'].runtimeType);
+    print(response);
     final daterangeResponse = dateRangeResponseFromJson(response.toString());
     setState(() {
       serviceMap = {

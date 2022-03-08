@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
             onPressed: () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const TicketList())),
+                MaterialPageRoute(builder: (context) =>  TicketList(""))),
           ),
           backgroundColor: const Color(0xfffcb913),
           iconTheme: const IconThemeData(color: Colors.black),

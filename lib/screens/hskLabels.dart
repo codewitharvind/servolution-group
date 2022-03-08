@@ -5,20 +5,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:servolution/screens/Hsk_House_Keeping.dart';
 import 'package:servolution/screens/csrScreen.dart';
+import 'package:servolution/screens/notificationInfo.dart';
 import 'package:servolution/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CSRLabel extends StatefulWidget {
+class HSK_Label extends StatefulWidget {
   final String text;
-  const CSRLabel({Key? key, required this.text}) : super(key: key);
+  const HSK_Label({Key? key, required this.text}) : super(key: key);
 
   @override
-  State<CSRLabel> createState() => _CSRLabelState();
+  State<HSK_Label> createState() => _HSK_LabelState();
 }
 
-class _CSRLabelState extends State<CSRLabel> {
+class _HSK_LabelState extends State<HSK_Label> {
   late SharedPreferences sharedPreferences;
   late List<dynamic> dataList;
   int count = 0;
@@ -72,7 +74,7 @@ class _CSRLabelState extends State<CSRLabel> {
       selectedFilePath = newImage.path;
     });
     print('**********************************');
-    print(choosedimage!.path);
+    print(choosedimage.path);
     print(selectedFilePath);
     print('**********************************');
     if (choosedimage != null) {
@@ -103,9 +105,14 @@ class _CSRLabelState extends State<CSRLabel> {
         ),
       );
       print(response);
-      /* if (response.data['status'] == true) {
-        print(response);
-      } */
+      if (response.data['status'] == true) {
+        final snackBar = SnackBar(
+          content: Text(response.data['message'],
+              style: GoogleFonts.poppins(fontSize: 12.0, color: Colors.white)),
+          backgroundColor: (const Color(0xfffcb913)),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 
@@ -116,15 +123,31 @@ class _CSRLabelState extends State<CSRLabel> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const CSRModule())),
+          onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HSK_House_keeping())),
         ),
         backgroundColor: const Color(0xfffcb913),
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          "CSR LABEL",
+          "HSK LABEL",
           style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.notifications,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationInfo()));
+            },
+          )
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servolution/screens/notificationInfo.dart';
 import 'package:servolution/screens/subCategorylist.dart';
 import 'package:servolution/screens/ticketDetailPage.dart';
 import 'package:servolution/utils/styles.dart';
@@ -73,6 +74,20 @@ class _CategoryListState extends State<CategoryList> {
           "CATEGORY LIST",
           style: GoogleFonts.poppins(fontSize: 20.0, color: Colors.black),
         ),
+        actions: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.notifications,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationInfo()));
+                },
+              )
+            ],
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
