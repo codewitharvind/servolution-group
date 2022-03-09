@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:servolution/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:servolution/screens/dashboard.dart';
@@ -45,6 +46,14 @@ class SplashScreenState extends State<MyHomePage> {
         )
     ); */
     startTime();
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+    OneSignal.shared.setAppId("ac5f6a92-e4d6-4a29-a67f-e3a45bba7bc8");
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      print("Accepted permission: $accepted");
+    });
   }
 
   Future<void> checkIsLogin() async {
